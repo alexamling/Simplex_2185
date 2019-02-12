@@ -7,12 +7,17 @@ Date: 2017/05
 
 #include "Definitions.h"
 
+#include "MyMesh.h"
+
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
 
 class Application
 {
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+
+	MyMesh* m_oMesh = nullptr; // pointer so that the object initializes at runtime (after openGL has compiled)
+
 private:
 	static ImGuiObject gui; //GUI object
 

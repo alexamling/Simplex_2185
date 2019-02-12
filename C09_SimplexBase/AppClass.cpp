@@ -40,6 +40,8 @@ void Application::Display(void)
 }
 void Application::Release(void)
 {
+	
+
 	//release GUI
 	ShutdownGUI();
 }

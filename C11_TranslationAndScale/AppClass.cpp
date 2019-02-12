@@ -37,7 +37,8 @@ void Application::Display(void)
 	
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
-	
+	m_pMeshMngr->AddGridToRenderList();
+
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
 

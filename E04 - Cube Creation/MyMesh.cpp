@@ -12,10 +12,19 @@ void MyMesh::GenerateCircle(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	if (a_nSubdivisions > 360)
 		a_nSubdivisions = 360;
 
+	vector3 center = vector3(0.0f, 0.0f, 0.0f);
+	float divisionInverse = 1.0f / a_nSubdivisions;
+
 	/*
 		Calculate a_nSubdivisions number of points around a center point in a radial manner
 		then call the AddTri function to generate a_nSubdivision number of faces
 	*/
+	
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		vector3 triPointA = vector3(cosf(2 * PI * divisionInverse * i), sinf(2 * PI * divisionInverse * i), 0.0f) * a_fRadius;
+		vector3 triPointb = vector3(cosf(2 * PI * divisionInverse * (i + 1)), sinf(2 * PI * divisionInverse * (i + 1)), 0.0f) * a_fRadius;
+		AddTri(triPointA, triPointb, center);
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
@@ -175,7 +184,7 @@ void MyMesh::AddTri(vector3 a_vBottomLeft, vector3 a_vBottomRight, vector3 a_vTo
 {
 	//C
 	//| \
-		//A--B
+	 //A--B
 //This will make the triangle A->B->C 
 	AddVertexPosition(a_vBottomLeft);
 	AddVertexPosition(a_vBottomRight);
