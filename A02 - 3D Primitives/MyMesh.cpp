@@ -1,4 +1,4 @@
-#include "MyMesh.h"
+ #include "MyMesh.h"
 void MyMesh::Init(void)
 {
 	m_bBinded = false;
@@ -276,7 +276,19 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	float yValue = a_fHeight * .5f;
+	float divisionAngle = 2 * PI / a_nSubdivisions;
+
+	vector3 centerPoint(0, yValue, 0);
+	vector3 centerBase(0, -yValue, 0);
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		vector3 point0(sinf(divisionAngle * i) * a_fRadius, -yValue, cosf(divisionAngle * i)* a_fRadius);
+		vector3 point1(sinf(divisionAngle * (i + 1))* a_fRadius, -yValue, cosf(divisionAngle * (i + 1))* a_fRadius);
+
+		AddTri(point0, point1, centerPoint);
+		AddTri(point1, point0, centerBase);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -300,7 +312,30 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	float yValue = a_fHeight * .5f;
+	float divisionAngle = 2 * PI / a_nSubdivisions;
+
+	vector3 centerTop(0, yValue, 0);
+	vector3 centerBottom(0, -yValue, 0);
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		//Center top
+		//| \
+		//2--3
+		//|  |
+		//0--1
+		//| /
+		//Center bottom
+
+		vector3 point0(sinf(divisionAngle * i) * a_fRadius, -yValue, cosf(divisionAngle * i)* a_fRadius);
+		vector3 point1(sinf(divisionAngle * (i + 1))* a_fRadius, -yValue, cosf(divisionAngle * (i + 1))* a_fRadius);
+		vector3 point2(sinf(divisionAngle * i) * a_fRadius, yValue, cosf(divisionAngle * i)* a_fRadius);
+		vector3 point3(sinf(divisionAngle * (i + 1))* a_fRadius, yValue, cosf(divisionAngle * (i + 1))* a_fRadius);
+
+		AddQuad(point0, point1, point2, point3);
+		AddTri(point1, point0, centerBottom);
+		AddTri(point2, point3, centerTop);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -330,7 +365,34 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	float yValue = a_fHeight * .5f;
+	float divisionAngle = 2 * PI / a_nSubdivisions;
+
+	vector3 centerTop(0, yValue, 0);
+	vector3 centerBottom(0, -yValue, 0);
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		//6--7
+		//|  |
+		//4--5
+		//|  |
+		//2--3
+		//|  |
+		//0--1
+		vector3 point0(sinf(divisionAngle * i) * a_fOuterRadius, -yValue, cosf(divisionAngle * i)* a_fOuterRadius);
+		vector3 point1(sinf(divisionAngle * (i + 1))* a_fOuterRadius, -yValue, cosf(divisionAngle * (i + 1))* a_fOuterRadius);
+		vector3 point2(sinf(divisionAngle * i) * a_fOuterRadius, yValue, cosf(divisionAngle * i)* a_fOuterRadius);
+		vector3 point3(sinf(divisionAngle * (i + 1))* a_fOuterRadius, yValue, cosf(divisionAngle * (i + 1))* a_fOuterRadius);
+		vector3 point4(sinf(divisionAngle * i) * a_fInnerRadius, yValue, cosf(divisionAngle * i)* a_fInnerRadius);
+		vector3 point5(sinf(divisionAngle * (i + 1))* a_fInnerRadius, yValue, cosf(divisionAngle * (i + 1))* a_fInnerRadius);
+		vector3 point6(sinf(divisionAngle * i) * a_fInnerRadius, -yValue, cosf(divisionAngle * i)* a_fInnerRadius);
+		vector3 point7(sinf(divisionAngle * (i + 1))* a_fInnerRadius, -yValue, cosf(divisionAngle * (i + 1))* a_fInnerRadius);
+
+		AddQuad(point0, point1, point2, point3);
+		AddQuad(point2, point3, point4, point5);
+		AddQuad(point4, point5, point6, point7);
+		AddQuad(point6, point7, point0, point1);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -362,7 +424,52 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	float divisionAngleA = PI / a_nSubdivisionsA;
+	float divisionAngleB = 2 * PI / a_nSubdivisionsB;
+
+	float internalRadius = a_fOuterRadius - a_fInnerRadius;
+	float centerRadius = a_fInnerRadius - internalRadius;
+
+	for (int i = 0; i < a_nSubdivisionsA; i++) {
+		//?--?
+		//|  |
+		//?--?
+		//|  |
+		//0--1
+
+		vector3 center0(cosf(2 * divisionAngleA * i), 0, sinf(2 * divisionAngleA * i));
+		vector3 center1(cosf(2 * divisionAngleA * (i + 1)), 0, sinf(2 * divisionAngleA *  (i + 1)));
+
+		for (float u = a_nSubdivisionsB / -2.0f; u < a_nSubdivisionsB / 2.0f; u++) {
+			vector3 point0(
+				cosf(2 * divisionAngleA * i) * cosf(divisionAngleB * u) * internalRadius, 
+				sinf(divisionAngleB * u) * internalRadius, 
+				sinf(2 * divisionAngleA * i) * cosf(divisionAngleB * u) * internalRadius
+			);
+			point0 += center0;
+			vector3 point1(
+				cosf(2 * divisionAngleA * (i + 1)) * cosf(divisionAngleB * u)* internalRadius, 
+				sinf(divisionAngleB * u) * internalRadius, 
+				sinf(2 * divisionAngleA * (i + 1)) * cosf(divisionAngleB * u) * internalRadius
+			);
+			point1 += center1;
+			vector3 point2(
+				cosf(2 * divisionAngleA * i) * cosf(divisionAngleB * (u + 1)) * internalRadius, 
+				sinf(divisionAngleB * (u + 1)) * internalRadius, 
+				sinf(2 * divisionAngleA * i) * cosf(divisionAngleB * (u + 1)) * internalRadius
+			);
+			point2 += center0;
+			vector3 point3(
+				cosf(2 * divisionAngleA * (i + 1)) * cosf(divisionAngleB * (u + 1)) * internalRadius, 
+				sinf(divisionAngleB * (u + 1)) * internalRadius, 
+				sinf(2 * divisionAngleA * (i + 1)) * cosf(divisionAngleB * (u + 1)) * internalRadius
+			);
+			point3 += center1;
+
+			AddQuad(point0, point1, point2, point3);
+		}
+
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -380,14 +487,36 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 		GenerateCube(a_fRadius * 2.0f, a_v3Color);
 		return;
 	}
-	if (a_nSubdivisions > 6)
-		a_nSubdivisions = 6;
+	if (a_nSubdivisions > 10)
+		a_nSubdivisions = 10;
 
 	Release();
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	float divisionAngle = PI / a_nSubdivisions;
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		//Center top
+		//| \
+		//?--?
+		//|  |
+		//?--?
+		//|  |
+		//0--1
+		//| /
+		//Center bottom
+
+		for (float u = a_nSubdivisions / -2.0f; u < a_nSubdivisions / 2.0f; u++) {
+			vector3 point0(cosf(2 * divisionAngle * i) * cosf(divisionAngle * u) * a_fRadius,             sinf(divisionAngle * u) * a_fRadius,       sinf(2 * divisionAngle * i) * cosf(divisionAngle * u) * a_fRadius);
+			vector3 point1(cosf(2 * divisionAngle * (i + 1)) * cosf(divisionAngle * u)* a_fRadius,       sinf(divisionAngle * u) * a_fRadius,       sinf(2 * divisionAngle * (i + 1)) * cosf(divisionAngle * u) * a_fRadius);
+			vector3 point2(cosf(2 * divisionAngle * i) * cosf(divisionAngle * (u + 1)) * a_fRadius,       sinf(divisionAngle * (u + 1)) * a_fRadius, sinf(2 * divisionAngle * i) * cosf(divisionAngle * (u + 1)) * a_fRadius);
+			vector3 point3(cosf(2 * divisionAngle * (i + 1)) * cosf(divisionAngle * (u + 1)) * a_fRadius, sinf(divisionAngle * (u + 1)) * a_fRadius, sinf(2 * divisionAngle * (i + 1)) * cosf(divisionAngle * (u + 1)) * a_fRadius);
+
+			AddQuad(point0, point1, point2, point3);
+		}
+
+	}
 	// -------------------------------
 
 	// Adding information about color
