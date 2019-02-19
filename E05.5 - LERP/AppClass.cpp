@@ -59,7 +59,9 @@ void Application::Display(void)
 
 
 	//your code goes here
-	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
+	glm::vec3 v3NextPoint = m_stopsList[ceilf(fTimer)];
+	glm::vec3 v3PreviousPoint = m_stopsList[floorf(fTimer)];
+	v3CurrentPos = glm::lerp(v3PreviousPoint, v3NextPoint, fmodf(fTimer, 1));
 	//-------------------
 	
 
