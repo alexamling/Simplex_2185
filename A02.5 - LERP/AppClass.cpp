@@ -56,6 +56,13 @@ void Application::Display(void)
 	// Clear the screen
 	ClearScreen();
 
+	//Timer code provided in E05.5 - written by Alberto Bobadilla - labigm@rit.edu
+	//Get a timer
+	static float fTimer = 0;	//store the new timer
+	static uint uClock = m_pSystem->GenClock(); //generate a new clock for that timer
+	fTimer += m_pSystem->GetDeltaTime(uClock); //get the delta time for that timer
+
+
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix(); //view Matrix
 	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix(); //Projection Matrix
 	matrix4 m4Offset = IDENTITY_M4; //offset of the orbits, starts as the global coordinate system
@@ -70,7 +77,9 @@ void Application::Display(void)
 		m_pMeshMngr->AddMeshToRenderList(m_shapeList[i], glm::rotate(m4Offset, 1.5708f, AXIS_X));
 
 		//calculate the current position
-		vector3 v3CurrentPos = ZERO_V3;
+		vector3 v3PreviousPoint(cosf(floorf(fTimer) * 2 * PI / (i + 3)) * (i + 2) * .5f, sinf(floorf(fTimer) * 2 * PI / (i + 3)) * (i + 2) * .5f, 0);
+		vector3 v3NextPoint(cosf(ceilf(fTimer) * 2 * PI / (i + 3)) * (i + 2) * .5f, sinf(ceilf(fTimer) * 2 * PI / (i + 3)) * (i + 2) * .5f, 0);
+		vector3 v3CurrentPos = glm::lerp(v3PreviousPoint,v3NextPoint,fmodf(fTimer, 1));
 		matrix4 m4Model = glm::translate(m4Offset, v3CurrentPos);
 
 		//draw spheres
