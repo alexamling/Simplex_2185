@@ -2,6 +2,9 @@
 using namespace Simplex;
 
 //Accessors
+void Simplex::MyCamera::SetForward(vector3 a_v3Position) { m_v3Forward = a_v3Position; }
+vector3 Simplex::MyCamera::GetForward(void) { return m_v3Forward; }
+vector3 Simplex::MyCamera::GetRight(void) { return glm::cross(m_v3Up, m_v3Forward); }
 void Simplex::MyCamera::SetPosition(vector3 a_v3Position) { m_v3Position = a_v3Position; }
 vector3 Simplex::MyCamera::GetPosition(void) { return m_v3Position; }
 void Simplex::MyCamera::SetTarget(vector3 a_v3Target) { m_v3Target = a_v3Target; }
@@ -132,6 +135,8 @@ void Simplex::MyCamera::SetPositionTargetAndUpward(vector3 a_v3Position, vector3
 void Simplex::MyCamera::CalculateViewMatrix(void)
 {
 	//Calculate the look at most of your assignment will be reflected in this method
+	m_v3Target = m_v3Position + m_v3Forward;
+	m_v3Above = m_v3Position + AXIS_Y;
 	m_m4View = glm::lookAt(m_v3Position, m_v3Target, glm::normalize(m_v3Above - m_v3Position)); //position, target, upward
 }
 
@@ -152,11 +157,16 @@ void Simplex::MyCamera::CalculateProjectionMatrix(void)
 
 void MyCamera::MoveForward(float a_fDistance)
 {
-	//The following is just an example and does not take in account the forward vector (AKA view vector)
-	m_v3Position += vector3(0.0f, 0.0f,-a_fDistance);
-	m_v3Target += vector3(0.0f, 0.0f, -a_fDistance);
-	m_v3Above += vector3(0.0f, 0.0f, -a_fDistance);
+	m_v3Position += m_v3Forward * a_fDistance; // move along the forward vector
 }
 
-void MyCamera::MoveVertical(float a_fDistance){}//Needs to be defined
-void MyCamera::MoveSideways(float a_fDistance){}//Needs to be defined
+void MyCamera::MoveVertical(float a_fDistance)
+{
+
+	m_v3Position += m_v3Up * a_fDistance; // move along the up vector
+}
+
+void MyCamera::MoveSideways(float a_fDistance)
+{
+	m_v3Position += glm::normalize(glm::cross(m_v3Up, m_v3Forward)) * a_fDistance; // move along the right vector (cross of forward and up)
+}

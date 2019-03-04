@@ -16,6 +16,9 @@ class MyCamera
 	vector3 m_v3Target = vector3(0.0f, 0.0f, 0.0f); //What I'm looking at
 	vector3 m_v3Above = vector3(0.0f, 1.0f, 0.0f); //What is above the camera
 
+	vector3 m_v3Forward = -AXIS_Z;
+	vector3 m_v3Up = AXIS_Y;
+
 	bool m_bPerspective = true; //perspective view? False is Orthographic
 
 	float m_fFOV = 45.0f; //Field of View
@@ -87,6 +90,27 @@ public:
 	OUTPUT: ---
 	*/
 	~MyCamera(void);
+
+	/*
+	USAGE: Sets the position of the camera
+	ARGUMENTS: vector3 a_v3Position -> forward vector of the camera
+	OUTPUT: ---
+	*/
+	void SetForward(vector3 a_v3Position);
+
+	/*
+	USAGE: Gets the position of the camera
+	ARGUMENTS: ---
+	OUTPUT: forward vector of the camera
+	*/
+	vector3 GetForward(void);
+
+	/*
+	USAGE: Gets the position of the camera
+	ARGUMENTS: ---
+	OUTPUT: right vector of the camera
+	*/
+	vector3 GetRight(void);
 
 	/*
 	USAGE: Sets the position of the camera
