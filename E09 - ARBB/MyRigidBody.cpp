@@ -85,8 +85,47 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	m_m4ToWorld = a_m4ModelMatrix;
 	
 	//your code goes here---------------------
-	m_v3MinG = m_v3MinL;
-	m_v3MaxG = m_v3MaxL;
+	vector3 v3GlobalPoints[8];
+
+	// get the 8 corners of the AABB
+	v3GlobalPoints[0] = m_v3MaxL;
+	v3GlobalPoints[1] = vector3(m_v3MinL.x, m_v3MaxL.y, m_v3MaxL.z);
+	v3GlobalPoints[2] = vector3(m_v3MinL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3GlobalPoints[3] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MaxL.z);
+	v3GlobalPoints[4] = vector3(m_v3MaxL.x, m_v3MaxL.y, m_v3MinL.z);
+	v3GlobalPoints[5] = vector3(m_v3MinL.x, m_v3MaxL.y, m_v3MinL.z);
+	v3GlobalPoints[6] = m_v3MinL;
+	v3GlobalPoints[7] = vector3(m_v3MaxL.x, m_v3MinL.y, m_v3MinL.z);
+
+	for (int i = 0; i < 8; i++) {
+		v3GlobalPoints[i] = (vector3)(m_m4ToWorld * vector4(v3GlobalPoints[i], 1)); // apply transformation
+	}
+
+	m_v3MinG = v3GlobalPoints[0];
+	m_v3MaxG = v3GlobalPoints[0];
+
+	for (int i = 0; i < 8; i++) {
+		// x values
+		if (v3GlobalPoints[i].x > m_v3MaxG.x)
+			m_v3MaxG.x = v3GlobalPoints[i].x;
+		else if (v3GlobalPoints[i].x < m_v3MinG.x)
+			m_v3MinG.x = v3GlobalPoints[i].x;
+
+		// y values
+		if (v3GlobalPoints[i].y > m_v3MaxG.y)
+			m_v3MaxG.y = v3GlobalPoints[i].y;
+		else if (v3GlobalPoints[i].y < m_v3MinG.y)
+			m_v3MinG.y = v3GlobalPoints[i].y;
+
+		// z values
+		if (v3GlobalPoints[i].z > m_v3MaxG.z)
+			m_v3MaxG.z = v3GlobalPoints[i].z;
+		else if (v3GlobalPoints[i].z < m_v3MinG.z)
+			m_v3MinG.z = v3GlobalPoints[i].z;
+	}
+
+	m_v3ARBBSize = vector3(m_v3MaxG.x - m_v3MinG.x, m_v3MaxG.y - m_v3MinG.y, m_v3MaxG.z - m_v3MinG.z);
+
 	//----------------------------------------
 
 	//we calculate the distance between min and max vectors
