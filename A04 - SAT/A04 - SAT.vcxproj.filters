@@ -74,7 +74,13 @@
     <ClInclude Include="ControllerConfiguration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Definitions.h">
+    <ClInclude Include="MyCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMeshManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyRigidBody.h">
