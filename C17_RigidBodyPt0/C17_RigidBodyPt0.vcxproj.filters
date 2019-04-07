@@ -24,9 +24,6 @@
     <ClCompile Include="AppClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AppClassControls.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AppClassMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,10 +48,10 @@
     <ClCompile Include="MyCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyMeshManager.cpp">
+    <ClCompile Include="MyRigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MyRigidBody.cpp">
+    <ClCompile Include="..\A05 - Octree\MyEntityManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyCamera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyMeshManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyRigidBody.h">

@@ -74,6 +74,8 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = true;
+	case sf::Keyboard::Up:
+		std::cout << "UP" << std::endl;
 		break;
 	}
 	//gui

@@ -55,7 +55,7 @@ public:
 	- float a_fSize -> size of each side of the octant volume
 	OUTPUT: class object
 	*/
-	MyOctant(vector3 a_v3Center, float a_fSize);
+	MyOctant(vector3 a_v3Center, float a_fSize, MyOctant* a_pParent);
 	/*
 	USAGE: Copy Constructor
 	ARGUMENTS: class object to copy
@@ -92,6 +92,7 @@ public:
 	ARGUMENTS: ---
 	OUTPUT: Center of the octant in global space
 	*/
+	uint GetLevel();
 	vector3 GetCenterGlobal(void);
 	/*
 	USAGE: Gets the min corner of the octant in global space
@@ -120,6 +121,7 @@ public:
 	- vector3 a_v3Color = REYELLOW -> Color of the volume to display.
 	OUTPUT: ---
 	*/
+	void AddToLeaves(uint a_uRBIndex);
 	void Display(uint a_nIndex, vector3 a_v3Color = C_YELLOW);
 	/*
 	USAGE: Displays the MyOctant volume in the color specified
@@ -190,7 +192,7 @@ public:
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void AssignIDtoEntity(void);
+	void AssignIDtoEntity(uint a_uRBIndex);
 
 	/*
 	USAGE: Gets the total number of octants in the world

@@ -14,7 +14,7 @@
     <ProjectGuid>{E3933AD0-C62B-4A00-8309-DAC3AB3C59D9}</ProjectGuid>
     <RootNamespace>E08 - Projections</RootNamespace>
     <ProjectName>E08 - Projections</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
